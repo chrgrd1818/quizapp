@@ -18,73 +18,140 @@ const handleAnswer = (index: number) => {
 };
 
 const getButtonClass = (index: number) => {
-  if (selectedOption.value === null) return 'is-white is-outlined';
+  if (selectedOption.value === null) return '';
   
   if (index === currentQuestion.value?.correctAnswer) {
-    return 'is-success';
+    return 'correct';
   }
   
   if (selectedOption.value === index && index !== currentQuestion.value?.correctAnswer) {
-    return 'is-danger';
+    return 'wrong';
   }
   
-  return 'is-white is-outlined';
+  return '';
 };
 </script>
 
 <template>
-  <div class="container is-max-desktop py-6">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        
-        <!-- Progress -->
-        <div class="mb-6">
-          <div class="is-flex is-justify-content-space-between mb-2">
-            <span class="has-text-weight-bold">Question {{ currentQuestionIndex + 1 }} / {{ totalQuestions }}</span>
-            <span>{{ Math.round(progress) }}%</span>
-          </div>
-          <progress class="progress is-primary is-small" :value="progress" max="100"></progress>
+  <div class="quiz-container">
+    <div class="quiz-content">
+      
+      <!-- Progress -->
+      <div class="progress-section mb-6">
+        <div class="progress-info mb-2">
+          <span class="question-count">Question {{ currentQuestionIndex + 1 }} <span class="text-muted">/ {{ totalQuestions }}</span></span>
+          <span class="progress-percent">{{ Math.round(progress) }}%</span>
         </div>
-
-        <!-- Question Card -->
-        <div class="card glass-panel mb-6">
-          <div class="card-content">
-            <h2 class="title is-3 has-text-centered mb-4">
-              {{ currentQuestion?.text }}
-            </h2>
-          </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" :style="{ width: `${progress}%` }"></div>
         </div>
-
-        <!-- Options -->
-        <div class="columns is-multiline">
-          <div 
-            v-for="(option, index) in currentQuestion?.options" 
-            :key="index"
-            class="column is-12"
-          >
-            <button 
-              class="button is-fullwidth is-large is-rounded transition-all"
-              :class="getButtonClass(index)"
-              @click="handleAnswer(index)"
-              :disabled="selectedOption !== null"
-            >
-              {{ option }}
-            </button>
-          </div>
-        </div>
-
       </div>
+
+      <!-- Question Card -->
+      <div class="glass-panel question-card mb-6">
+        <h2 class="question-text">
+          {{ currentQuestion?.text }}
+        </h2>
+      </div>
+
+      <!-- Options -->
+      <div class="options-grid">
+        <button 
+          v-for="(option, index) in currentQuestion?.options" 
+          :key="index"
+          class="btn option-btn"
+          :class="getButtonClass(index)"
+          @click="handleAnswer(index)"
+          :disabled="selectedOption !== null"
+        >
+          {{ option }}
+        </button>
+      </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-.transition-all {
-  transition: all 0.3s ease;
+.quiz-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
-.button.is-white.is-outlined:hover {
-  background-color: rgba(255,255,255,0.1);
-  color: white;
-  border-color: white;
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.text-muted {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.5s ease;
+  border-radius: var(--radius-full);
+}
+
+.question-card {
+  padding: var(--spacing-lg);
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.question-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.options-grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.option-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+  font-size: 1.1rem;
+  padding: 1.25rem;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.option-btn.correct {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.option-btn.wrong {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: var(--error);
+  color: var(--error);
 }
 </style>
