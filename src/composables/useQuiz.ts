@@ -1,4 +1,4 @@
-import { ref, computed, reactive } from 'vue';
+import { ref, computed } from 'vue';
 import { type Topic, type Question, QUIZ_DATA } from '../data/quizData';
 
 export type GameState = 'welcome' | 'playing' | 'finished';

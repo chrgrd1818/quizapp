@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/composables/usequiz.ts","./src/data/quizdata.ts","./src/app.vue","./src/components/quizview.vue","./src/components/resultview.vue","./src/components/welcomeview.vue"],"version":"5.9.3"}
